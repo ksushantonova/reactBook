@@ -20,13 +20,15 @@ class Exel extends Component {
 			headers: [],
 			initialData: []
 		}
+		this._presearchData = null;
 		this._sort = this._sort.bind(this);
+		this._search = this._search.bind(this);
 		this._showEditor = this._showEditor.bind(this);
 		this._save = this._save.bind(this);
 		this._renderTable = this._renderTable.bind(this);
 		this._renderToolbar = this._renderToolbar.bind(this);
 		this._renderSearch= this._renderSearch.bind(this);
-
+		this._toggleSearch= this._toggleSearch.bind(this);
 		}
 
 	_sort(e){
@@ -78,6 +80,7 @@ class Exel extends Component {
 					</tr>
 				</thead>
 				<tbody onDoubleClick={this._showEditor}>
+					{this._renderSearch()}
 					{state.data.map((row, rowi) => {
 						return <tr key={rowi}>{row.map((cell,i) => {
 							let content = cell;
@@ -109,11 +112,45 @@ class Exel extends Component {
 		 return (
 		 	<tr onChange={this._search}>{
 		 		this.props.headers.map((_ignore, idx) => {
-
+		 			return (
+		 				<td key={idx}>
+		 					<input type="text" data-idx={idx}></input>
+		 				</td>
+		 				)
 		 		})
 		 	}
 		 	</tr>
 		 )
+	}
+
+	_toggleSearch(){
+		if (this.state.search){
+			this.setState({
+				data: this._presearchData,
+				search: false
+			})
+			this._presearchData = null;
+		} else {
+			this._presearchData = this.state.data;
+			this.setState({
+				search: true
+			})
+		}
+	}
+
+	_search(e){
+		let preSearchData = this._presearchData;
+		console.log(preSearchData);
+		let needle = e.target.value.toLowerCase(); 
+		if (!needle) { 
+		   this.setState({data: preSearchData});
+		   return;  
+		}
+		let idx = e.target.dataset.idx; 
+		let searchdata = preSearchData.filter((row) => {
+			return row[idx].toString().toLowerCase().indexOf(needle) > -1;  
+		}); 
+		 this.setState({data: searchdata}); 
 	}
 	
 	render(){
