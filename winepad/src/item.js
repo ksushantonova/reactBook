@@ -6,29 +6,22 @@ export default class Item extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			isChecked: false
+			isChecked: this.props.done,
 		}
-		this._checkElement = this._checkElement.bind(this);
 	}
 
-	_checkElement(e){
-		console.log(e.target.nextElementSibling)
-		if(this.state.isChecked == "true"){
-			e.target.nextElementSibling.className = "checked"
-		} else {
-			e.target.nextElementSibling.className = "unchecked"
-		}
+	componentDidMount(){
 		this.setState({
-     		 isChecked: !this.state.isChecked,
-    	});
-    	this.props.checkElement();
+			idx: this.props.idx
+		})
 	}
 
 	render(){
+		console.log(this.props.done)
 		return (
-			<div id={this.props.idx}>
-				<input className="box" type="checkbox" checked={this.state.isChecked} onChange={this._checkElement}></input>
-				<li className="li">{this.props.text}</li>
+			<div id={this.state.idx}>
+				<input   className="box" type="checkbox" checked={this.props.done} onChange={this.props.checkElement}></input>
+				<li className="li" style={{color: this.props.color, textDecoration: this.props.textDecoration}}>{this.props.text}</li>
 				<div className="rm" type="button" onClick={this.props.removeTask}>REMOVE</div>
 			</div>
 			)
