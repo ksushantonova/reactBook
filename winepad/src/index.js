@@ -12,7 +12,7 @@ export default class App extends Component {
 			data: [],
 			term: "",
 			counter: 0,
-			buttonText: "CHECKALL"
+			buttonText: "*"
 		}
 		this._setValue = this._setValue.bind(this);
 		this._addValue = this._addValue.bind(this);
@@ -96,15 +96,15 @@ export default class App extends Component {
 	}
 
 	_makeItemOperations(e){
-		if (this.state.buttonText == "CHECKALL"){
+		if (this.state.buttonText == "*"){
 			this._checkAllItems(true);
 			this.setState({
-				buttonText: "UNCHECKALL"
+				buttonText: "^"
 		})
 		} else {
 			this._checkAllItems(false);
 			this.setState({
-				buttonText: "CHECKALL"
+				buttonText: "*"
 		})
 		}
 	}
@@ -129,7 +129,7 @@ export default class App extends Component {
 		return(
 		<div id="mainId">
 		<h1>TODO</h1>
-		<button onClick={this._makeItemOperations}>{this.state.buttonText}</button>
+		<button id="all" onClick={this._makeItemOperations}>{this.state.buttonText}</button>
 			<form  onSubmit={this._setValue}>
 				<input type="text" id="mainInput" ref="mainInput" placeholder="What needs to be done?" onChange={this._addValue}></input>
 			</form>	
